@@ -161,13 +161,13 @@ const ContactPage = () => {
             <span className="file-tree__icon file-tree__icon--mail">
               <FaEnvelope />
             </span>
-            <span>user@gmail.com</span>
+            <span>pieroaguilaranticonajob@gmail.com</span>
           </div>
           <div className="file-tree__item file-tree__item--nested">
             <span className="file-tree__icon file-tree__icon--phone">
               <FaPhone />
             </span>
-            <span>+51 999 999 999</span>
+            <span>+51 957 369 914</span>
           </div>
         </div>
 

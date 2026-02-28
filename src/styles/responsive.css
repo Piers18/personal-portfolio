@@ -1,0 +1,87 @@
+/* ===== RESPONSIVE ===== */
+@media (max-width: 1200px) {
+  .snippet-section {
+    width: 280px;
+    min-width: 280px;
+  }
+
+  .hello-page__snippets {
+    width: 320px;
+    min-width: 280px;
+  }
+}
+
+@media (max-width: 900px) {
+  .hello-page {
+    padding: 30px 40px;
+  }
+
+  .hello-page__name {
+    font-size: 40px;
+  }
+
+  .hello-page__snippets {
+    display: none;
+  }
+
+  .hello-page {
+    justify-content: flex-start;
+  }
+
+  .snippet-section {
+    display: none;
+  }
+
+  .sidebar {
+    width: 200px;
+    min-width: 200px;
+  }
+
+  .projects-sidebar,
+  .contact-sidebar {
+    width: 200px;
+    min-width: 200px;
+  }
+
+  .not-found-page {
+    flex-direction: column;
+    gap: 40px;
+  }
+}
+
+@media (max-width: 600px) {
+  .navbar__logo {
+    min-width: auto;
+    padding: 0 12px;
+    font-size: 12px;
+  }
+
+  .navbar__tab {
+    padding: 0 12px;
+    font-size: 11px;
+  }
+
+  .hello-page {
+    padding: 20px;
+  }
+
+  .hello-page__name {
+    font-size: 30px;
+  }
+
+  .sidebar,
+  .projects-sidebar,
+  .contact-sidebar,
+  .about-sidebar {
+    display: none;
+  }
+
+  .contact-code-section {
+    display: none;
+  }
+
+  .projects-grid {
+    padding: 16px;
+    grid-template-columns: 1fr;
+  }
+}

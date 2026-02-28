@@ -1,9 +1,13 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
+import { codeSnippets } from "../data/codeSnippets";
 
 const HelloPage = () => {
   const [titleText, setTitleText] = useState("");
-  const fullTitle = "Front-end developer";
+  const [activeIndex, setActiveIndex] = useState(0);
+  const trackRef = useRef<HTMLDivElement>(null);
+  const fullTitle = "Full Stack developer";
 
+  // Typing animation
   useEffect(() => {
     let index = 0;
     const interval = setInterval(() => {
@@ -17,6 +21,47 @@ const HelloPage = () => {
     return () => clearInterval(interval);
   }, []);
 
+  // Step-by-step scroll: 2.5s per card
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setActiveIndex((prev) => (prev + 1) % codeSnippets.length);
+    }, 2500);
+    return () => clearInterval(interval);
+  }, []);
+
+  // Get card class for center/near/far styling
+  const getCardClass = (index: number) => {
+    const center = activeIndex;
+    const total = codeSnippets.length;
+    let diff = index - center;
+    if (diff > total / 2) diff -= total;
+    if (diff < -total / 2) diff += total;
+
+    if (diff === 0) return "floating-snippet--center";
+    if (Math.abs(diff) === 1) return "floating-snippet--near";
+    return "";
+  };
+
+  // Calculate translateY so the active card is always centered
+  const getTranslateY = () => {
+    if (!trackRef.current) return 0;
+    const cards = trackRef.current.children;
+    if (cards.length === 0) return 0;
+
+    let offset = 0;
+    for (let i = 0; i < activeIndex; i++) {
+      offset += (cards[i] as HTMLElement).offsetHeight + 36;
+    }
+    const activeCard = cards[activeIndex] as HTMLElement;
+    if (activeCard) {
+      const container = trackRef.current.parentElement;
+      if (container) {
+        offset -= (container.offsetHeight - activeCard.offsetHeight) / 2;
+      }
+    }
+    return -offset;
+  };
+
   return (
     <div className="hello-page">
       <div className="hello-page__content">
@@ -27,7 +72,7 @@ const HelloPage = () => {
         </div>
 
         <p className="hello-page__comment">
-          {"// complete the game to continue"}
+          {"// my stack: Angular / React + Spring Boot"}
         </p>
         <p className="hello-page__comment">{"// find my profile on Github:"}</p>
         <p className="hello-page__link">
@@ -35,127 +80,30 @@ const HelloPage = () => {
           <span className="variable">githubLink </span>
           <span className="operator">= </span>
           <a
-            href="https://github.com"
+            href="https://github.com/Piers18"
             target="_blank"
             rel="noopener noreferrer"
           >
-            "https://github.com/username"
+            "https://github.com/Piers18"
           </a>
           ;
         </p>
       </div>
 
       <div className="hello-page__snippets">
-        <div className="floating-snippet">
-          <code>
-            <span style={{ color: "var(--syntax-keyword)" }}>function </span>
-            <span style={{ color: "var(--syntax-function)" }}>
-              initializeApp
-            </span>
-            <span style={{ color: "var(--text-primary)" }}>(</span>
-            <span style={{ color: "var(--syntax-variable)" }}>config</span>
-            <span style={{ color: "var(--text-primary)" }}>): </span>
-            <span style={{ color: "var(--syntax-type)" }}>App </span>
-            <span style={{ color: "var(--text-primary)" }}>{"{"}</span>
-            <br />
-            {"  "}
-            <span style={{ color: "var(--syntax-keyword)" }}>const </span>
-            <span style={{ color: "var(--syntax-variable)" }}>app</span>
-            <span style={{ color: "var(--text-primary)" }}> = </span>
-            <span style={{ color: "var(--syntax-function)" }}>
-              createInstance
-            </span>
-            <span style={{ color: "var(--text-primary)" }}>(config);</span>
-            <br />
-            {"  "}
-            <span style={{ color: "var(--syntax-keyword)" }}>const </span>
-            <span style={{ color: "var(--syntax-variable)" }}>setup</span>
-            <span style={{ color: "var(--text-primary)" }}> = </span>
-            <span style={{ color: "var(--syntax-function)" }}>configure</span>
-            <span style={{ color: "var(--text-primary)" }}>(app);</span>
-            <br />
-            {"  "}
-            <span style={{ color: "var(--syntax-variable)" }}>setup</span>
-            <span style={{ color: "var(--text-primary)" }}>.</span>
-            <span style={{ color: "var(--syntax-variable)" }}>status</span>
-            <span style={{ color: "var(--text-primary)" }}> = </span>
-            <span style={{ color: "var(--syntax-constant)" }}>READY</span>
-            <span style={{ color: "var(--text-primary)" }}>;</span>
-            <br />
-            {"  "}
-            <span style={{ color: "var(--syntax-keyword)" }}>return </span>
-            <span style={{ color: "var(--syntax-variable)" }}>app</span>
-            <span style={{ color: "var(--text-primary)" }}>;</span>
-            <br />
-            <span style={{ color: "var(--text-primary)" }}>{"}"}</span>
-          </code>
-        </div>
-
-        <div className="floating-snippet">
-          <code>
-            <span style={{ color: "var(--syntax-keyword)" }}>function </span>
-            <span style={{ color: "var(--syntax-function)" }}>
-              handleRequest
-            </span>
-            <span style={{ color: "var(--text-primary)" }}>(</span>
-            <span style={{ color: "var(--syntax-variable)" }}>req</span>
-            <span style={{ color: "var(--text-primary)" }}>, </span>
-            <span style={{ color: "var(--syntax-variable)" }}>res</span>
-            <span style={{ color: "var(--text-primary)" }}>): </span>
-            <span style={{ color: "var(--syntax-type)" }}>Response </span>
-            <span style={{ color: "var(--text-primary)" }}>{"{"}</span>
-            <br />
-            {"  "}
-            <span style={{ color: "var(--syntax-keyword)" }}>const </span>
-            <span style={{ color: "var(--syntax-variable)" }}>data</span>
-            <span style={{ color: "var(--text-primary)" }}> = </span>
-            <span style={{ color: "var(--syntax-function)" }}>parseBody</span>
-            <span style={{ color: "var(--text-primary)" }}>(req.body);</span>
-            <br />
-            {"  "}
-            <span style={{ color: "var(--syntax-keyword)" }}>const </span>
-            <span style={{ color: "var(--syntax-variable)" }}>validated </span>
-            <span style={{ color: "var(--text-primary)" }}>= </span>
-            <span style={{ color: "var(--syntax-function)" }}>validate</span>
-            <span style={{ color: "var(--text-primary)" }}>(data);</span>
-            <br />
-            {"  "}
-            <span style={{ color: "var(--syntax-keyword)" }}>return </span>
-            <span style={{ color: "var(--syntax-variable)" }}>res</span>
-            <span style={{ color: "var(--text-primary)" }}>.</span>
-            <span style={{ color: "var(--syntax-function)" }}>json</span>
-            <span style={{ color: "var(--text-primary)" }}>(validated);</span>
-            <br />
-            <span style={{ color: "var(--text-primary)" }}>{"}"}</span>
-          </code>
-        </div>
-
-        <div className="floating-snippet">
-          <code>
-            <span style={{ color: "var(--syntax-keyword)" }}>function </span>
-            <span style={{ color: "var(--syntax-function)" }}>
-              buildPipeline
-            </span>
-            <span style={{ color: "var(--text-primary)" }}>(</span>
-            <span style={{ color: "var(--syntax-variable)" }}>steps</span>
-            <span style={{ color: "var(--text-primary)" }}>): </span>
-            <span style={{ color: "var(--syntax-type)" }}>Pipeline </span>
-            <span style={{ color: "var(--text-primary)" }}>{"{"}</span>
-            <br />
-            {"  "}
-            <span style={{ color: "var(--syntax-keyword)" }}>const </span>
-            <span style={{ color: "var(--syntax-variable)" }}>result</span>
-            <span style={{ color: "var(--text-primary)" }}> = </span>
-            <span style={{ color: "var(--syntax-function)" }}>compose</span>
-            <span style={{ color: "var(--text-primary)" }}>(steps);</span>
-            <br />
-            {"  "}
-            <span style={{ color: "var(--syntax-keyword)" }}>return </span>
-            <span style={{ color: "var(--syntax-variable)" }}>result</span>
-            <span style={{ color: "var(--text-primary)" }}>;</span>
-            <br />
-            <span style={{ color: "var(--text-primary)" }}>{"}"}</span>
-          </code>
+        <div
+          className="hello-page__snippets-track"
+          ref={trackRef}
+          style={{
+            transform: `translateY(${getTranslateY()}px)`,
+          }}
+        >
+          {codeSnippets.map((snippet, i) => (
+            <div key={i} className={`floating-snippet ${getCardClass(i)}`}>
+              <div className="floating-snippet__lang">{snippet.lang}</div>
+              <code>{snippet.code}</code>
+            </div>
+          ))}
         </div>
       </div>
     </div>
