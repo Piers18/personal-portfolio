@@ -6,7 +6,7 @@ const Footer = () => {
       <div className="footer__left">
         <span className="footer__label">find me in:</span>
         <a
-          href="https://linkedin.com"
+          href="https://www.linkedin.com/in/piero-antonio-aguilar-anticona-336214228"
           target="_blank"
           rel="noopener noreferrer"
           className="footer__social-link"
