@@ -1,0 +1,113 @@
+/* ===== CONTACT PAGE ===== */
+.contact-page {
+  flex: 1;
+  display: flex;
+  overflow: hidden;
+}
+
+.contact-sidebar {
+  width: var(--sidebar-width);
+  min-width: var(--sidebar-width);
+  border-right: 1px solid var(--border-primary);
+  overflow-y: auto;
+  background: var(--glass-bg);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+}
+
+.contact-main {
+  flex: 1;
+  display: flex;
+  overflow: hidden;
+}
+
+.contact-form-section {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px;
+  border-right: 1px solid var(--border-primary);
+}
+
+.contact-form {
+  width: 100%;
+  max-width: 400px;
+}
+
+.contact-form__group {
+  margin-bottom: 20px;
+}
+
+.contact-form__label {
+  display: block;
+  font-size: 13px;
+  color: var(--text-secondary);
+  margin-bottom: 8px;
+}
+
+.contact-form__input,
+.contact-form__textarea {
+  width: 100%;
+  padding: 10px 14px;
+  font-size: 14px;
+  color: var(--text-primary);
+  background: var(--glass-bg-light);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-md);
+  transition: border-color var(--transition-fast);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+.contact-form__input:focus,
+.contact-form__textarea:focus {
+  border-color: rgba(77, 91, 206, 0.4);
+  box-shadow: 0 0 12px 2px rgba(77, 91, 206, 0.08);
+}
+
+.contact-form__textarea {
+  min-height: 120px;
+  resize: vertical;
+}
+
+.contact-form__submit {
+  padding: 10px 20px;
+  font-size: 13px;
+  color: var(--text-primary);
+  background: rgba(30, 45, 61, 0.6);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-md);
+  transition: all var(--transition-fast);
+  margin-top: 8px;
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+}
+
+.contact-form__submit:hover {
+  background: rgba(38, 59, 80, 0.6);
+  border-color: rgba(77, 91, 206, 0.3);
+}
+
+.contact-code-section {
+  flex: 1;
+  padding: 40px;
+  overflow-y: auto;
+}
+
+.contact-code {
+  font-size: 14px;
+  line-height: 1.8;
+}
+
+.contact-code__line {
+  display: flex;
+}
+
+.contact-code__number {
+  width: 40px;
+  text-align: right;
+  color: var(--text-muted);
+  margin-right: 24px;
+  user-select: none;
+}

@@ -1,0 +1,35 @@
+/* ===== 404 PAGE ===== */
+.not-found-page {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px;
+  gap: 80px;
+}
+
+.not-found-page__art {
+  font-size: 120px;
+  font-weight: 700;
+  color: var(--text-muted);
+  letter-spacing: -4px;
+  text-shadow: 0 0 40px rgba(96, 123, 150, 0.3);
+  line-height: 1;
+}
+
+.not-found-page__code {
+  font-size: 14px;
+  line-height: 1.8;
+}
+
+.not-found-page__code-line {
+  display: flex;
+}
+
+.not-found-page__line-number {
+  width: 40px;
+  text-align: right;
+  color: var(--text-muted);
+  margin-right: 24px;
+  user-select: none;
+}

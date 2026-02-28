@@ -1,0 +1,10 @@
+/* Global CSS barrel - imports all style partials in order */
+@import './variables.css';
+@import './reset.css';
+@import './layout.css';
+@import './hello.css';
+@import './about.css';
+@import './projects.css';
+@import './contact.css';
+@import './notfound.css';
+@import './responsive.css';
