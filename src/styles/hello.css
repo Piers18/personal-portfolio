@@ -4,7 +4,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 40px;
+  gap: 70px;
   position: relative;
   overflow: hidden;
   padding: 40px 60px;
@@ -128,7 +128,7 @@
 .hello-page__snippets-track {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 36px;
   transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
