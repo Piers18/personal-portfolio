@@ -23,11 +23,11 @@ export const codeSnippets: Snippet[] = [
         {"\n"}
         {c("@RequestMapping")}
         {w("(")}
-        {s('"/api/inventory"')}
+        {s('"/api/users"')}
         {w(")")}
         {"\n"}
         {k("public class ")}
-        {tp("InventoryController")}
+        {tp("UserController")}
         {w(" {")}
         {"\n"}
         {"  "}
@@ -35,8 +35,8 @@ export const codeSnippets: Snippet[] = [
         {"\n"}
         {"  "}
         {k("private ")}
-        {tp("InventoryService ")}
-        {v("service")}
+        {tp("UserService ")}
+        {v("userService")}
         {w(";")}
         {"\n"}
         {"\n"}
@@ -50,9 +50,9 @@ export const codeSnippets: Snippet[] = [
         {k("public ")}
         {tp("ResponseEntity")}
         {w("<")}
-        {tp("Item")}
+        {tp("UserDTO")}
         {w("> ")}
-        {f("getItem")}
+        {f("getUser")}
         {w("(")}
         {"\n"}
         {"    "}
@@ -69,7 +69,7 @@ export const codeSnippets: Snippet[] = [
         {w("(")}
         {"\n"}
         {"      "}
-        {v("service")}
+        {v("userService")}
         {w(".")}
         {f("findById")}
         {w("(")}
@@ -93,18 +93,18 @@ export const codeSnippets: Snippet[] = [
         {"  "}
         {v("selector")}
         {w(": ")}
-        {s("'app-dashboard'")}
+        {s("'app-profile'")}
         {w(",")}
         {"\n"}
         {"  "}
         {v("templateUrl")}
         {w(": ")}
-        {s("'./dashboard.html'")}
+        {s("'./profile.html'")}
         {"\n"}
         {w("})")}
         {"\n"}
         {k("export class ")}
-        {tp("DashboardComponent")}
+        {tp("ProfileComponent")}
         {"\n"}
         {"  "}
         {k("implements ")}
@@ -112,38 +112,21 @@ export const codeSnippets: Snippet[] = [
         {w(" {")}
         {"\n"}
         {"  "}
-        {v("items$")}
-        {w(" = ")}
-        {k("this")}
-        {w(".")}
-        {v("store")}
-        {w(".")}
-        {f("select")}
-        {w("(")}
-        {f("getItems")}
-        {w(");")}
+        {v("user$")}
+        {w("!: ")}
+        {tp("Observable")}
+        {w("<")}
+        {tp("User")}
+        {w(">;")}
         {"\n"}
         {"\n"}
         {"  "}
         {f("constructor")}
         {w("(")}
-        {"\n"}
-        {"    "}
         {k("private ")}
-        {v("store")}
+        {v("auth")}
         {w(": ")}
-        {tp("Store")}
-        {w("<")}
-        {tp("AppState")}
-        {w(">,")}
-        {"\n"}
-        {"    "}
-        {k("private ")}
-        {v("http")}
-        {w(": ")}
-        {tp("HttpClient")}
-        {"\n"}
-        {"  "}
+        {tp("AuthService")}
         {w(") {}")}
         {"\n"}
         {"\n"}
@@ -154,12 +137,14 @@ export const codeSnippets: Snippet[] = [
         {"    "}
         {k("this")}
         {w(".")}
-        {v("store")}
+        {v("user$")}
+        {w(" = ")}
+        {k("this")}
         {w(".")}
-        {f("dispatch")}
-        {w("(")}
-        {f("loadItems")}
-        {w("());")}
+        {v("auth")}
+        {w(".")}
+        {f("getCurrentUser")}
+        {w("();")}
         {"\n"}
         {"  "}
         {w("}")}
@@ -172,7 +157,7 @@ export const codeSnippets: Snippet[] = [
     lang: "TypeScript / React",
     code: (
       <pre>
-        {k("const ")}
+        {k("export const ")}
         {f("useAuth")}
         {w(" = () => {")}
         {"\n"}
@@ -186,9 +171,18 @@ export const codeSnippets: Snippet[] = [
         {f("useState")}
         {w("<")}
         {tp("User")}
-        {w(">();")}
+        {w(" | ")}
+        {tp("null")}
+        {w(">(")}
+        {tp("null")}
+        {w(");")}
+        {"\n"}
         {"\n"}
         {"  "}
+        {f("useEffect")}
+        {w("(() => {")}
+        {"\n"}
+        {"    "}
         {k("const ")}
         {v("token")}
         {w(" = ")}
@@ -198,11 +192,6 @@ export const codeSnippets: Snippet[] = [
         {w("(")}
         {s("'jwt'")}
         {w(");")}
-        {"\n"}
-        {"\n"}
-        {"  "}
-        {f("useEffect")}
-        {w("(() => {")}
         {"\n"}
         {"    "}
         {k("if ")}
@@ -215,19 +204,8 @@ export const codeSnippets: Snippet[] = [
         {w(".")}
         {f("get")}
         {w("(")}
-        {s("'/me'")}
-        {w(", {")}
-        {"\n"}
-        {"        "}
-        {v("headers")}
-        {w(": { ")}
-        {v("Authorization")}
-        {w(": ")}
-        {v("token")}
-        {w(" }")}
-        {"\n"}
-        {"      "}
-        {w("}).")}
+        {s("'/auth/me'")}
+        {w(").")}
         {f("then")}
         {w("(")}
         {v("res")}
@@ -237,15 +215,13 @@ export const codeSnippets: Snippet[] = [
         {v("res")}
         {w(".")}
         {v("data")}
-        {w("));")}
+        {w(")));")}
         {"\n"}
         {"    "}
         {w("}")}
         {"\n"}
         {"  "}
-        {w("}, [")}
-        {v("token")}
-        {w("]);")}
+        {w("}, []);")}
         {"\n"}
         {"\n"}
         {"  "}
@@ -253,11 +229,10 @@ export const codeSnippets: Snippet[] = [
         {w("{ ")}
         {v("user")}
         {w(", ")}
-        {v("isAuth")}
+        {v("isAuthenticated")}
         {w(": !!")}
         {v("user")}
         {w(" };")}
-        {"\n"}
         {"\n"}
         {w("};")}
       </pre>
@@ -269,20 +244,24 @@ export const codeSnippets: Snippet[] = [
       <pre>
         {c("@app")}
         {w(".")}
-        {f("post")}
+        {f("get")}
         {w("(")}
-        {s('"/api/predict"')}
+        {s('"/api/items/{item_id}"')}
+        {w(", ")}
+        {v("response_model")}
+        {w("=")}
+        {tp("Item")}
         {w(")")}
         {"\n"}
         {k("async def ")}
-        {f("predict")}
+        {f("read_item")}
         {w("(")}
         {"\n"}
         {"    "}
-        {v("data")}
+        {v("item_id")}
         {w(": ")}
-        {tp("PredictionRequest")}
-        {w(",")}
+        {tp("int")}
+        {w(", ")}
         {"\n"}
         {"    "}
         {v("db")}
@@ -297,41 +276,157 @@ export const codeSnippets: Snippet[] = [
         {w("):")}
         {"\n"}
         {"    "}
-        {v("model")}
+        {v("item")}
         {w(" = ")}
-        {f("load_model")}
-        {w("(")}
-        {s('"v2"')}
-        {w(")")}
-        {"\n"}
-        {"    "}
-        {v("result")}
-        {w(" = ")}
-        {v("model")}
-        {w(".")}
-        {f("predict")}
-        {w("(")}
-        {v("data")}
-        {w(".")}
-        {v("features")}
-        {w(")")}
-        {"\n"}
-        {"    "}
-        {k("await ")}
-        {f("save_prediction")}
-        {w("(")}
         {v("db")}
-        {w(", ")}
-        {v("result")}
+        {w(".")}
+        {f("query")}
+        {w("(")}
+        {tp("models")}
+        {w(".")}
+        {tp("Item")}
+        {w(").")}
+        {f("filter")}
+        {w("(...).")}
+        {f("first")}
+        {w("()")}
+        {"\n"}
+        {"    "}
+        {k("if ")}
+        {v("item")}
+        {w(" ")}
+        {k("is None")}
+        {w(":")}
+        {"\n"}
+        {"        "}
+        {k("raise ")}
+        {tp("HTTPException")}
+        {w("(")}
+        {v("status_code")}
+        {w("=")}
+        {c("404")}
         {w(")")}
         {"\n"}
         {"    "}
         {k("return ")}
-        {w("{")}
-        {s('"prediction"')}
+        {v("item")}
+      </pre>
+    ),
+  },
+  {
+    lang: "TypeScript / Express",
+    code: (
+      <pre>
+        {k("const ")}
+        {v("app")}
+        {w(" = ")}
+        {f("express")}
+        {w("();")}
+        {"\n"}
+        {v("app")}
+        {w(".")}
+        {f("use")}
+        {w("(")}
+        {v("express")}
+        {w(".")}
+        {f("json")}
+        {w("());")}
+        {"\n"}
+        {"\n"}
+        {v("app")}
+        {w(".")}
+        {f("post")}
+        {w("(")}
+        {s('"/api/login"')}
+        {w(", ")}
+        {k("async ")}
+        {w("(")}
+        {v("req")}
+        {w(", ")}
+        {v("res")}
+        {w(") => {")}
+        {"\n"}
+        {"  "}
+        {k("const ")}
+        {w("{ ")}
+        {v("email")}
+        {w(", ")}
+        {v("password")}
+        {w(" } = ")}
+        {v("req")}
+        {w(".")}
+        {v("body")}
+        {w(";")}
+        {"\n"}
+        {"  "}
+        {k("const ")}
+        {v("user")}
+        {w(" = ")}
+        {k("await ")}
+        {tp("User")}
+        {w(".")}
+        {f("findOne")}
+        {w("({ ")}
+        {v("email")}
+        {w(" });")}
+        {"\n"}
+        {"\n"}
+        {"  "}
+        {k("if ")}
+        {w("(!")}
+        {v("user")}
+        {w(" || !(")}
+        {k("await ")}
+        {f("compare")}
+        {w("(")}
+        {v("password")}
+        {w(", ")}
+        {v("user")}
+        {w(".")}
+        {v("hash")}
+        {w("))) {")}
+        {"\n"}
+        {"    "}
+        {k("return ")}
+        {v("res")}
+        {w(".")}
+        {f("status")}
+        {w("(")}
+        {c("401")}
+        {w(").")}
+        {f("json")}
+        {w("({")}
+        {v("error")}
         {w(": ")}
-        {v("result")}
+        {s('"Invalid auth"')}
+        {w("});")}
+        {"\n"}
+        {"  "}
         {w("}")}
+        {"\n"}
+        {"\n"}
+        {"  "}
+        {k("const ")}
+        {v("token")}
+        {w(" = ")}
+        {f("signJwt")}
+        {w("({ ")}
+        {v("id")}
+        {w(": ")}
+        {v("user")}
+        {w(".")}
+        {v("id")}
+        {w(" });")}
+        {"\n"}
+        {"  "}
+        {v("res")}
+        {w(".")}
+        {f("json")}
+        {w("({ ")}
+        {v("token")}
+        {w(" });")}
+        {"\n"}
+        {w("});")}
       </pre>
     ),
   },
@@ -355,11 +450,11 @@ export const codeSnippets: Snippet[] = [
         {tp("SecurityFilterChain ")}
         {f("chain")}
         {w("(")}
-        {"\n"}
-        {"    "}
         {tp("HttpSecurity ")}
         {v("http")}
-        {w(") ")}
+        {w(")")}
+        {"\n"}
+        {"      "}
         {k("throws ")}
         {tp("Exception")}
         {w(" {")}
@@ -384,11 +479,15 @@ export const codeSnippets: Snippet[] = [
         {w(".")}
         {f("antMatchers")}
         {w("(")}
-        {s('"/api/**"')}
-        {w(")")}
+        {s('"/api/public/**"')}
+        {w(").")}
+        {f("permitAll")}
+        {w("()")}
         {"\n"}
         {"      "}
         {w(".")}
+        {f("anyRequest")}
+        {w("().")}
         {f("authenticated")}
         {w("()")}
         {"\n"}
@@ -396,13 +495,17 @@ export const codeSnippets: Snippet[] = [
         {w(".")}
         {k("and")}
         {w("().")}
-        {f("oauth2Login")}
-        {w("()")}
+        {f("addFilterBefore")}
+        {w("(")}
+        {"\n"}
+        {"        "}
+        {v("jwtFilter")}
+        {w(", ")}
+        {tp("UsernamePasswordAuthFilter")}
+        {w(".class)")}
         {"\n"}
         {"      "}
         {w(".")}
-        {k("and")}
-        {w("().")}
         {f("build")}
         {w("();")}
         {"\n"}
@@ -414,438 +517,200 @@ export const codeSnippets: Snippet[] = [
     ),
   },
   {
-    lang: "SQL / PostgreSQL",
+    lang: "TypeScript / Angular",
     code: (
       <pre>
-        {k("SELECT ")}
-        {v("p")}
-        {w(".")}
-        {v("name")}
-        {w(", ")}
-        {v("p")}
-        {w(".")}
-        {v("stock")}
-        {w(",")}
+        {c("@Injectable")}
+        {w("({ ")}
+        {v("providedIn")}
+        {w(": ")}
+        {s("'root'")}
+        {w(" })")}
+        {"\n"}
+        {k("export class ")}
+        {tp("DataService")}
+        {w(" {")}
         {"\n"}
         {"  "}
-        {v("c")}
-        {w(".")}
-        {v("category_name")}
-        {w(",")}
-        {"\n"}
-        {"  "}
-        {f("COALESCE")}
-        {w("(")}
-        {f("SUM")}
-        {w("(")}
-        {v("o")}
-        {w(".")}
-        {v("quantity")}
-        {w("), ")}
-        {c("0")}
-        {w(") ")}
-        {k("AS ")}
-        {v("sold")}
-        {"\n"}
-        {k("FROM ")}
-        {tp("products ")}
-        {v("p")}
-        {"\n"}
-        {k("JOIN ")}
-        {tp("categories ")}
-        {v("c")}
-        {w(" ")}
-        {k("ON ")}
-        {v("c")}
-        {w(".")}
-        {v("id")}
+        {k("private ")}
+        {v("apiUrl")}
         {w(" = ")}
-        {v("p")}
-        {w(".")}
-        {v("category_id")}
-        {"\n"}
-        {k("LEFT JOIN ")}
-        {tp("order_items ")}
-        {v("o")}
-        {w(" ")}
-        {k("ON ")}
-        {v("o")}
-        {w(".")}
-        {v("product_id")}
-        {w(" = ")}
-        {v("p")}
-        {w(".")}
-        {v("id")}
-        {"\n"}
-        {k("WHERE ")}
-        {v("p")}
-        {w(".")}
-        {v("active")}
-        {w(" = ")}
-        {c("true")}
-        {"\n"}
-        {k("GROUP BY ")}
-        {v("p")}
-        {w(".")}
-        {v("id")}
-        {w(", ")}
-        {v("c")}
-        {w(".")}
-        {v("category_name")}
-        {"\n"}
-        {k("HAVING ")}
-        {f("SUM")}
-        {w("(")}
-        {v("o")}
-        {w(".")}
-        {v("quantity")}
-        {w(") > ")}
-        {c("10")}
-        {"\n"}
-        {k("ORDER BY ")}
-        {v("sold")}
-        {w(" ")}
-        {k("DESC")}
+        {s("'https://api.example.com'")}
         {w(";")}
-      </pre>
-    ),
-  },
-  {
-    lang: "TypeScript / Express",
-    code: (
-      <pre>
-        {k("const ")}
-        {v("app")}
-        {w(" = ")}
-        {f("express")}
-        {w("();")}
         {"\n"}
         {"\n"}
-        {v("app")}
-        {w(".")}
-        {f("use")}
+        {"  "}
+        {f("constructor")}
         {w("(")}
-        {f("cors")}
-        {w("());")}
+        {k("private ")}
+        {v("http")}
+        {w(": ")}
+        {tp("HttpClient")}
+        {w(") {}")}
         {"\n"}
-        {v("app")}
+        {"\n"}
+        {"  "}
+        {f("fetchAnalytics")}
+        {w("(): ")}
+        {tp("Observable")}
+        {w("<")}
+        {tp("AnalyticsData")}
+        {w("> {")}
+        {"\n"}
+        {"    "}
+        {k("return this")}
         {w(".")}
-        {f("use")}
-        {w("(")}
-        {v("express")}
-        {w(".")}
-        {f("json")}
-        {w("());")}
-        {"\n"}
-        {"\n"}
-        {v("app")}
+        {v("http")}
         {w(".")}
         {f("get")}
-        {w("(")}
-        {s('"/api/users/:id"')}
-        {w(", ")}
-        {k("async ")}
-        {w("(")}
-        {v("req")}
-        {w(", ")}
-        {v("res")}
-        {w(") => {")}
-        {"\n"}
-        {"  "}
-        {k("const ")}
-        {v("user")}
-        {w(" = ")}
-        {k("await ")}
-        {tp("User")}
-        {w(".")}
-        {f("findByPk")}
-        {w("(")}
-        {v("req")}
-        {w(".")}
-        {v("params")}
-        {w(".")}
-        {v("id")}
-        {w(");")}
-        {"\n"}
-        {"  "}
-        {k("if ")}
-        {w("(!")}
-        {v("user")}
-        {w(") ")}
-        {k("return ")}
-        {v("res")}
-        {w(".")}
-        {f("status")}
-        {w("(")}
-        {c("404")}
-        {w(").")}
-        {f("json")}
-        {w("({")}
-        {"\n"}
-        {"    "}
-        {v("error")}
-        {w(": ")}
-        {s('"User not found"')}
-        {"\n"}
-        {"  "}
-        {w("});")}
-        {"\n"}
-        {"  "}
-        {v("res")}
-        {w(".")}
-        {f("json")}
-        {w("(")}
-        {v("user")}
-        {w(");")}
-        {"\n"}
-        {w("});")}
-        {"\n"}
-        {"\n"}
-        {v("app")}
-        {w(".")}
-        {f("listen")}
-        {w("(")}
-        {c("3000")}
-        {w(", () => ")}
-        {f("console")}
-        {w(".")}
-        {f("log")}
-        {w("(")}
-        {s('"Server running"')}
-        {w("));")}
-      </pre>
-    ),
-  },
-  {
-    lang: "Docker / Compose",
-    code: (
-      <pre>
-        {tp("services")}
-        {w(":")}
-        {"\n"}
-        {"  "}
-        {v("backend")}
-        {w(":")}
-        {"\n"}
-        {"    "}
-        {v("build")}
-        {w(": ")}
-        {s("./backend")}
-        {"\n"}
-        {"    "}
-        {v("ports")}
-        {w(": [")}
-        {s('"8080:8080"')}
-        {w("]")}
-        {"\n"}
-        {"    "}
-        {v("environment")}
-        {w(":")}
+        {w("<")}
+        {tp("AnalyticsData")}
+        {w(">(")}
         {"\n"}
         {"      "}
-        {w("- ")}
-        {v("DB_HOST")}
-        {w("=")}
-        {s("postgres")}
-        {"\n"}
-        {"      "}
-        {w("- ")}
-        {v("JWT_SECRET")}
-        {w("=")}
-        {s("${SECRET}")}
-        {"\n"}
-        {"    "}
-        {v("depends_on")}
-        {w(": [")}
-        {s("postgres")}
-        {w("]")}
-        {"\n"}
-        {"  "}
-        {v("postgres")}
-        {w(":")}
-        {"\n"}
-        {"    "}
-        {v("image")}
-        {w(": ")}
-        {s("postgres:15")}
-        {"\n"}
-        {"    "}
-        {v("volumes")}
-        {w(":")}
-        {"\n"}
-        {"      "}
-        {w("- ")}
-        {s("pgdata:/var/lib/postgresql/data")}
-      </pre>
-    ),
-  },
-  {
-    lang: "Go / Gin",
-    code: (
-      <pre>
-        {k("func ")}
-        {f("main")}
-        {w("() {")}
-        {"\n"}
-        {"  "}
-        {v("r")}
-        {w(" := ")}
-        {v("gin")}
-        {w(".")}
-        {f("Default")}
-        {w("()")}
-        {"\n"}
-        {"\n"}
-        {"  "}
-        {v("r")}
-        {w(".")}
-        {f("GET")}
-        {w("(")}
-        {s('"/ping"')}
-        {w(", ")}
-        {k("func")}
-        {w("(")}
-        {v("c")}
-        {w(" *")}
-        {tp("gin.Context")}
-        {w(") {")}
-        {"\n"}
-        {"    "}
-        {v("c")}
-        {w(".")}
-        {f("JSON")}
-        {w("(")}
-        {c("200")}
-        {w(", ")}
-        {tp("gin")}
-        {w(".")}
-        {tp("H")}
+        {w("`$")}
         {w("{")}
-        {"\n"}
-        {"      "}
-        {s('"message"')}
-        {w(": ")}
-        {s('"pong"')}
-        {w(",")}
+        {k("this")}
+        {w(".")}
+        {v("apiUrl")}
+        {w("}")}
+        {s("/analytics")}
+        {w("`")}
         {"\n"}
         {"    "}
-        {w("})")}
-        {"\n"}
-        {"  "}
-        {w("})")}
-        {"\n"}
-        {"\n"}
-        {"  "}
-        {v("r")}
-        {w(".")}
-        {f("Run")}
+        {w(").")}
+        {f("pipe")}
         {w("(")}
-        {s('":8080"')}
+        {"\n"}
+        {"      "}
+        {f("retry")}
+        {w("(")}
+        {c("3")}
+        {w("),")}
+        {"\n"}
+        {"      "}
+        {f("catchError")}
+        {w("(")}
+        {k("this")}
+        {w(".")}
+        {f("handleError")}
         {w(")")}
         {"\n"}
+        {"    "}
+        {w(");")}
+        {"\n"}
+        {"  "}
+        {w("}")}
+        {"\n"}
         {w("}")}
       </pre>
     ),
   },
   {
-    lang: "Rust / Actix",
+    lang: "TypeScript / React",
     code: (
       <pre>
-        {c("#[actix_web::main]")}
+        {k("import ")}
+        {w("{ ")}
+        {v("createContext")}
+        {w(", ")}
+        {v("useContext")}
+        {w(" } ")}
+        {k("from ")}
+        {s("'react'")}
+        {w(";")}
         {"\n"}
-        {k("async fn ")}
-        {f("main")}
-        {w("() -> ")}
-        {tp("std::io::Result")}
-        {w("<()> {")}
+        {"\n"}
+        {k("const ")}
+        {v("ThemeContext")}
+        {w(" = ")}
+        {f("createContext")}
+        {w("<")}
+        {tp("ThemeType")}
+        {w(">({")}
         {"\n"}
         {"  "}
-        {tp("HttpServer")}
-        {w("::")}
-        {f("new")}
-        {w("(|| {")}
+        {v("theme")}
+        {w(": ")}
+        {s("'dark'")}
+        {w(", ")}
+        {f("toggleTheme")}
+        {w(": () => {}")}
+        {"\n"}
+        {w("});")}
+        {"\n"}
+        {"\n"}
+        {k("export const ")}
+        {tp("ThemeProvider")}
+        {w(" = ({ ")}
+        {v("children")}
+        {w(" }) => {")}
+        {"\n"}
+        {"  "}
+        {k("const ")}
+        {w("[")}
+        {v("theme")}
+        {w(", ")}
+        {v("setTheme")}
+        {w("] = ")}
+        {f("useState")}
+        {w("(")}
+        {s("'dark'")}
+        {w(");")}
+        {"\n"}
+        {"\n"}
+        {"  "}
+        {k("const ")}
+        {f("toggleTheme")}
+        {w(" = () => {")}
         {"\n"}
         {"    "}
-        {tp("App")}
-        {w("::")}
-        {f("new")}
-        {w("()")}
+        {f("setTheme")}
+        {w("(")}
+        {v("prev")}
+        {w(" => ")}
+        {v("prev")}
+        {w(" === ")}
+        {s("'dark'")}
+        {w(" ? ")}
+        {s("'light'")}
+        {w(" : ")}
+        {s("'dark'")}
+        {w(");")}
+        {"\n"}
+        {"  "}
+        {w("};")}
+        {"\n"}
+        {"\n"}
+        {"  "}
+        {k("return ")}
+        {w("(")}
+        {"\n"}
+        {"    "}
+        {w("<")}
+        {tp("ThemeContext.Provider")}
+        {w(" ")}
+        {v("value")}
+        {w("={{ ")}
+        {v("theme")}
+        {w(", ")}
+        {v("toggleTheme")}
+        {w(" }}>")}
         {"\n"}
         {"      "}
-        {w(".")}
-        {f("route")}
-        {w("(")}
-        {s('"/hello"')}
-        {w(", ")}
-        {v("web")}
-        {w("::")}
-        {f("get")}
-        {w("().")}
-        {f("to")}
-        {w("(")}
-        {f("manual_hello")}
-        {w("))")}
-        {"\n"}
-        {"  "}
-        {w("})")}
-        {"\n"}
-        {"  "}
-        {w(".")}
-        {f("bind")}
-        {w("(")}
-        {s('("127.0.0.1", 8080)')}
-        {w(")?")}
-        {"\n"}
-        {"  "}
-        {w(".")}
-        {f("run")}
-        {w("()")}
-        {"\n"}
-        {"  "}
-        {w(".")}
-        {k("await")}
-        {"\n"}
+        {w("{")}
+        {v("children")}
         {w("}")}
-      </pre>
-    ),
-  },
-  {
-    lang: "C# / .NET Core",
-    code: (
-      <pre>
-        {k("var ")}
-        {v("builder")}
-        {w(" = ")}
-        {tp("WebApplication")}
-        {w(".")}
-        {f("CreateBuilder")}
-        {w("(")}
-        {v("args")}
+        {"\n"}
+        {"    "}
+        {w("</")}
+        {tp("ThemeContext.Provider")}
+        {w(">")}
+        {"\n"}
+        {"  "}
         {w(");")}
         {"\n"}
-        {k("var ")}
-        {v("app")}
-        {w(" = ")}
-        {v("builder")}
-        {w(".")}
-        {f("Build")}
-        {w("();")}
-        {"\n"}
-        {"\n"}
-        {v("app")}
-        {w(".")}
-        {f("MapGet")}
-        {w("(")}
-        {s('"/api/hello"')}
-        {w(", () => ")}
-        {s('"Hello World!"')}
-        {w(");")}
-        {"\n"}
-        {"\n"}
-        {v("app")}
-        {w(".")}
-        {f("Run")}
-        {w("();")}
+        {w("};")}
       </pre>
     ),
   },
@@ -854,67 +719,233 @@ export const codeSnippets: Snippet[] = [
     code: (
       <pre>
         {k("const ")}
-        {v("http")}
+        {f("authMiddleware")}
+        {w(" = (")}
+        {v("req")}
+        {w(", ")}
+        {v("res")}
+        {w(", ")}
+        {v("next")}
+        {w(") => {")}
+        {"\n"}
+        {"  "}
+        {k("const ")}
+        {v("authHeader")}
         {w(" = ")}
-        {f("require")}
+        {v("req")}
+        {w(".")}
+        {v("headers")}
+        {w("[")}
+        {s("'authorization'")}
+        {w("];")}
+        {"\n"}
+        {"  "}
+        {k("const ")}
+        {v("token")}
+        {w(" = ")}
+        {v("authHeader")}
+        {w(" && ")}
+        {v("authHeader")}
+        {w(".")}
+        {f("split")}
         {w("(")}
-        {s("'http'")}
+        {s("' '")}
+        {w(")[")}
+        {c("1")}
+        {w("];")}
+        {"\n"}
+        {"\n"}
+        {"  "}
+        {k("if ")}
+        {w("(")}
+        {v("token")}
+        {w(" == ")}
+        {k("null")}
+        {w(") ")}
+        {k("return ")}
+        {v("res")}
+        {w(".")}
+        {f("sendStatus")}
+        {w("(")}
+        {c("401")}
         {w(");")}
         {"\n"}
         {"\n"}
-        {k("const ")}
-        {v("server")}
-        {w(" = ")}
-        {v("http")}
-        {w(".")}
-        {f("createServer")}
-        {w("((req, res) => {")}
-        {"\n"}
         {"  "}
+        {v("jwt")}
+        {w(".")}
+        {f("verify")}
+        {w("(")}
+        {v("token")}
+        {w(", ")}
+        {v("process")}
+        {w(".")}
+        {v("env")}
+        {w(".")}
+        {v("TOKEN_SECRET")}
+        {w(", (")}
+        {v("err")}
+        {w(", ")}
+        {v("user")}
+        {w(") => {")}
+        {"\n"}
+        {"    "}
+        {k("if ")}
+        {w("(")}
+        {v("err")}
+        {w(") ")}
+        {k("return ")}
         {v("res")}
         {w(".")}
-        {v("statusCode")}
+        {f("sendStatus")}
+        {w("(")}
+        {c("403")}
+        {w(");")}
+        {"\n"}
+        {"    "}
+        {v("req")}
+        {w(".")}
+        {v("user")}
         {w(" = ")}
-        {c("200")}
+        {v("user")}
         {w(";")}
         {"\n"}
+        {"    "}
+        {f("next")}
+        {w("();")}
+        {"\n"}
         {"  "}
-        {v("res")}
-        {w(".")}
-        {f("setHeader")}
+        {w("});")}
+        {"\n"}
+        {w("};")}
+      </pre>
+    ),
+  },
+  {
+    lang: "Python / FastAPI",
+    code: (
+      <pre>
+        {k("class ")}
+        {tp("UserCreate")}
         {w("(")}
-        {s("'Content-Type'")}
+        {tp("BaseModel")}
+        {w("):")}
+        {"\n"}
+        {"    "}
+        {v("email")}
+        {w(": ")}
+        {tp("EmailStr")}
+        {"\n"}
+        {"    "}
+        {v("password")}
+        {w(": ")}
+        {tp("str")}
+        {"\n"}
+        {"\n"}
+        {k("class ")}
+        {tp("UserResponse")}
+        {w("(")}
+        {tp("BaseModel")}
+        {w("):")}
+        {"\n"}
+        {"    "}
+        {v("id")}
+        {w(": ")}
+        {tp("int")}
+        {"\n"}
+        {"    "}
+        {v("email")}
+        {w(": ")}
+        {tp("EmailStr")}
+        {"\n"}
+        {"    "}
+        {v("is_active")}
+        {w(": ")}
+        {tp("bool")}
+        {"\n"}
+        {"\n"}
+        {"    "}
+        {k("class ")}
+        {tp("Config")}
+        {w(":")}
+        {"\n"}
+        {"        "}
+        {v("orm_mode")}
+        {w(" = ")}
+        {c("True")}
+        {"\n"}
+        {"\n"}
+        {c("@app")}
+        {w(".")}
+        {f("post")}
+        {w("(")}
+        {s('"/users/"')}
         {w(", ")}
-        {s("'text/plain'")}
-        {w(");")}
+        {v("response_model")}
+        {w("=")}
+        {tp("UserResponse")}
+        {w(")")}
         {"\n"}
-        {"  "}
-        {v("res")}
-        {w(".")}
-        {f("end")}
+        {k("def ")}
+        {f("create_user")}
         {w("(")}
-        {s("'Hello World\\n'")}
-        {w(");")}
-        {"\n"}
-        {w("});")}
-        {"\n"}
-        {"\n"}
-        {v("server")}
-        {w(".")}
-        {f("listen")}
+        {v("user")}
+        {w(": ")}
+        {tp("UserCreate")}
+        {w(", ")}
+        {v("db")}
+        {w(": ")}
+        {tp("Session")}
+        {w(" = ")}
+        {f("Depends")}
         {w("(")}
-        {c("3000")}
-        {w(", () => {")}
+        {v("get_db")}
+        {w(")):")}
         {"\n"}
-        {"  "}
-        {v("console")}
-        {w(".")}
-        {f("log")}
+        {"    "}
+        {v("db_user")}
+        {w(" = ")}
+        {f("get_user_by_email")}
         {w("(")}
-        {s("'Server running at port 3000'")}
-        {w(");")}
+        {v("db")}
+        {w(", ")}
+        {v("email")}
+        {w("=")}
+        {v("user")}
+        {w(".")}
+        {v("email")}
+        {w(")")}
         {"\n"}
-        {w("});")}
+        {"    "}
+        {k("if ")}
+        {v("db_user")}
+        {w(":")}
+        {"\n"}
+        {"        "}
+        {k("raise ")}
+        {tp("HTTPException")}
+        {w("(")}
+        {v("status_code")}
+        {w("=")}
+        {c("400")}
+        {w(", ")}
+        {v("detail")}
+        {w("=")}
+        {s('"Email registered"')}
+        {w(")")}
+        {"\n"}
+        {"    "}
+        {k("return ")}
+        {f("create_user_impl")}
+        {w("(")}
+        {v("db")}
+        {w("=")}
+        {v("db")}
+        {w(", ")}
+        {v("user")}
+        {w("=")}
+        {v("user")}
+        {w(")")}
       </pre>
     ),
   },
