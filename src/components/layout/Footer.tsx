@@ -26,12 +26,12 @@ const Footer = () => {
       </div>
       <div className="footer__right">
         <a
-          href="https://github.com"
+          href="https://github.com/Piers18"
           target="_blank"
           rel="noopener noreferrer"
           className="footer__github"
         >
-          @username <FaGithub />
+          @Piers18 <FaGithub />
         </a>
       </div>
     </footer>

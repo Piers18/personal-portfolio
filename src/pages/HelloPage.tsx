@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 
 const HelloPage = () => {
   const [titleText, setTitleText] = useState("");
-  const fullTitle = "Front-end developer";
+  const fullTitle = "Full Stack developer";
 
   useEffect(() => {
     let index = 0;
@@ -35,11 +35,11 @@ const HelloPage = () => {
           <span className="variable">githubLink </span>
           <span className="operator">= </span>
           <a
-            href="https://github.com"
+            href="https://github.com/Piers18"
             target="_blank"
             rel="noopener noreferrer"
           >
-            "https://github.com/username"
+            "https://github.com/Piers18"
           </a>
           ;
         </p>
