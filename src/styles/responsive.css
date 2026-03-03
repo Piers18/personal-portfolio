@@ -72,8 +72,13 @@
   .sidebar,
   .projects-sidebar,
   .contact-sidebar,
-  .about-sidebar {
+  .about-sidebar,
+  .about-sidebar__icons {
     display: none;
+  }
+
+  .about-breadcrumb {
+    font-size: 11px;
   }
 
   .contact-code-section {

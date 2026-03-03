@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import {
   FaChevronRight,
   FaFolder,
@@ -17,6 +17,7 @@ interface FileItem {
   name: string;
   type: "folder" | "file";
   icon?: string;
+  parentPath?: string[];
   children?: FileItem[];
   content?: string[];
 }
@@ -31,6 +32,7 @@ const personalInfo: FileItem[] = [
         id: "bio-file",
         name: "about-me",
         type: "file",
+        parentPath: ["personal-info", "bio"],
         content: [
           "/**",
           " * About me",
@@ -59,6 +61,7 @@ const personalInfo: FileItem[] = [
         id: "interests-file",
         name: "hobbies",
         type: "file",
+        parentPath: ["personal-info", "interests"],
         content: [
           "/**",
           " * My Interests & Hobbies",
@@ -84,6 +87,7 @@ const personalInfo: FileItem[] = [
         id: "upc",
         name: "upc",
         type: "file",
+        parentPath: ["personal-info", "education"],
         content: [
           "/**",
           " * Universidad Peruana de Ciencias",
@@ -98,6 +102,7 @@ const personalInfo: FileItem[] = [
         id: "uns",
         name: "universidad-nacional-del-santa",
         type: "file",
+        parentPath: ["personal-info", "education"],
         content: [
           "/**",
           " * Universidad Nacional del Santa",
@@ -117,6 +122,7 @@ const contacts: FileItem[] = [
     name: "pieroaguilaranticonajob@gmail.com",
     type: "file",
     icon: "mail",
+    parentPath: ["contacts"],
     content: ["// Email: pieroaguilaranticonajob@gmail.com"],
   },
   {
@@ -124,6 +130,7 @@ const contacts: FileItem[] = [
     name: "+51 957 369 914",
     type: "file",
     icon: "phone",
+    parentPath: ["contacts"],
     content: ["// Phone: +51 957 369 914"],
   },
 ];
@@ -156,6 +163,77 @@ const codeSnippets = [
   },
 ];
 
+// Syntax highlighting helper
+const highlightLine = (line: string) => {
+  // Comment blocks
+  const trimmed = line.trimStart();
+  if (
+    trimmed.startsWith("/**") ||
+    trimmed.startsWith("* ") ||
+    trimmed.startsWith("*/") ||
+    trimmed === "*" ||
+    trimmed.startsWith("//")
+  ) {
+    return <span style={{ color: "var(--syntax-comment)" }}>{line}</span>;
+  }
+
+  // Highlight keywords, types, strings, etc.
+  let result: React.ReactNode[] = [];
+  let key = 0;
+
+  // Simple tokenizer — split by patterns
+  const tokens: { start: number; end: number; color: string }[] = [];
+
+  let match;
+  const regex = new RegExp(
+    `(\\b(?:const|let|var|function|return|export|import|from|if|else|for|while|new|class|interface|type|extends|implements)\\b)|(\\b(?:string|number|boolean|void|any|null|undefined|never|T|Response|JSONValue)\\b)|(["'\`].*?["'\`])|(\\b\\d+\\b)`,
+    "g",
+  );
+
+  while ((match = regex.exec(line)) !== null) {
+    let color = "var(--text-secondary)";
+    if (match[1]) color = "var(--syntax-keyword)";
+    else if (match[2]) color = "var(--syntax-type)";
+    else if (match[3]) color = "var(--syntax-string)";
+    else if (match[4]) color = "var(--syntax-number)";
+    tokens.push({
+      start: match.index,
+      end: match.index + match[0].length,
+      color,
+    });
+  }
+
+  if (tokens.length === 0) {
+    return <span style={{ color: "var(--text-secondary)" }}>{line}</span>;
+  }
+
+  let lastIndex = 0;
+  for (const token of tokens) {
+    if (token.start > lastIndex) {
+      result.push(
+        <span key={key++} style={{ color: "var(--text-secondary)" }}>
+          {line.slice(lastIndex, token.start)}
+        </span>,
+      );
+    }
+    result.push(
+      <span key={key++} style={{ color: token.color }}>
+        {line.slice(token.start, token.end)}
+      </span>,
+    );
+    lastIndex = token.end;
+  }
+  if (lastIndex < line.length) {
+    result.push(
+      <span key={key++} style={{ color: "var(--text-secondary)" }}>
+        {line.slice(lastIndex)}
+      </span>,
+    );
+  }
+
+  return <>{result}</>;
+};
+
 const AboutPage = () => {
   const [openFolders, setOpenFolders] = useState<string[]>([
     "bio",
@@ -163,6 +241,8 @@ const AboutPage = () => {
   ]);
   const [selectedFile, setSelectedFile] = useState<string>("bio-file");
   const [activeSection, setActiveSection] = useState<string>("personal");
+  const [hoveredLine, setHoveredLine] = useState<number | null>(null);
+  const [animationKey, setAnimationKey] = useState(0);
 
   const toggleFolder = (folderId: string) => {
     setOpenFolders((prev) =>
@@ -172,37 +252,32 @@ const AboutPage = () => {
     );
   };
 
-  const getCurrentContent = (): string[] => {
+  const findItem = (id: string): FileItem | undefined => {
     const allItems = [...personalInfo, ...contacts];
-    const findContent = (items: FileItem[]): string[] | undefined => {
+    const search = (items: FileItem[]): FileItem | undefined => {
       for (const item of items) {
-        if (item.id === selectedFile && item.content) return item.content;
+        if (item.id === id) return item;
         if (item.children) {
-          const found = findContent(item.children);
+          const found = search(item.children);
           if (found) return found;
         }
       }
       return undefined;
     };
-    return findContent(allItems) || ["// Select a file to view its contents"];
+    return search(allItems);
   };
 
-  const getFileName = (): string => {
-    const allItems = [...personalInfo, ...contacts];
-    const findName = (items: FileItem[]): string | undefined => {
-      for (const item of items) {
-        if (item.id === selectedFile) return item.name;
-        if (item.children) {
-          const found = findName(item.children);
-          if (found) return found;
-        }
-      }
-      return undefined;
-    };
-    return findName(allItems) || "untitled";
-  };
+  const currentItem = useMemo(() => findItem(selectedFile), [selectedFile]);
+  const content = currentItem?.content || [
+    "// Select a file to view its contents",
+  ];
+  const fileName = currentItem?.name || "untitled";
+  const breadcrumbPath = currentItem?.parentPath || [];
 
-  const content = getCurrentContent();
+  const handleSelectFile = (fileId: string) => {
+    setSelectedFile(fileId);
+    setAnimationKey((prev) => prev + 1);
+  };
 
   return (
     <div className="about-page">
@@ -264,7 +339,7 @@ const AboutPage = () => {
                     <div
                       key={file.id}
                       className={`file-tree__item file-tree__item--nested ${selectedFile === file.id ? "file-tree__item--active" : ""}`}
-                      onClick={() => setSelectedFile(file.id)}
+                      onClick={() => handleSelectFile(file.id)}
                     >
                       <span className="file-tree__icon file-tree__icon--file">
                         <IoMdDocument />
@@ -289,7 +364,7 @@ const AboutPage = () => {
               <div
                 key={contact.id}
                 className={`file-tree__item file-tree__item--nested ${selectedFile === contact.id ? "file-tree__item--active" : ""}`}
-                onClick={() => setSelectedFile(contact.id)}
+                onClick={() => handleSelectFile(contact.id)}
               >
                 <span
                   className={`file-tree__icon ${contact.icon === "mail" ? "file-tree__icon--mail" : "file-tree__icon--phone"}`}
@@ -308,34 +383,53 @@ const AboutPage = () => {
         <div className="code-editor">
           <div className="code-editor__tabs">
             <div className="code-editor__tab code-editor__tab--active">
-              <span>{getFileName()}</span>
+              <span>{fileName}</span>
               <span className="code-editor__tab-close">✕</span>
             </div>
           </div>
 
+          {/* Breadcrumb path */}
+          <div className="about-breadcrumb">
+            {breadcrumbPath.map((segment, i) => (
+              <span
+                key={i}
+                style={{ display: "flex", alignItems: "center", gap: 6 }}
+              >
+                <span className="about-breadcrumb__item">{segment}</span>
+                <FaChevronRight className="about-breadcrumb__sep" />
+              </span>
+            ))}
+            <span className="about-breadcrumb__item">{fileName}</span>
+          </div>
+
           <div className="code-editor__content">
-            <div className="code-editor__lines">
+            <div
+              className="code-editor__lines about-page__content-fade"
+              key={animationKey}
+            >
               <div className="code-editor__line-numbers">
                 {content.map((_, i) => (
-                  <span key={i}>{i + 1}</span>
+                  <span
+                    key={i}
+                    style={{
+                      color:
+                        hoveredLine === i ? "var(--text-secondary)" : undefined,
+                    }}
+                  >
+                    {i + 1}
+                  </span>
                 ))}
               </div>
               <div className="code-editor__code">
                 {content.map((line, i) => (
-                  <div key={i}>
-                    {line.startsWith("/**") ||
-                    line.startsWith(" *") ||
-                    line.startsWith(" */") ? (
-                      <span style={{ color: "var(--syntax-comment)" }}>
-                        {line}
-                      </span>
-                    ) : line.startsWith("//") ? (
-                      <span style={{ color: "var(--syntax-comment)" }}>
-                        {line}
-                      </span>
-                    ) : (
-                      <span>{line}</span>
-                    )}
+                  <div
+                    key={i}
+                    className={`about-page__line about-page__line--typing ${hoveredLine === i ? "about-page__line--active" : ""}`}
+                    style={{ animationDelay: `${i * 40}ms` }}
+                    onMouseEnter={() => setHoveredLine(i)}
+                    onMouseLeave={() => setHoveredLine(null)}
+                  >
+                    {highlightLine(line)}
                   </div>
                 ))}
               </div>
